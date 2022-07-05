@@ -22,7 +22,7 @@ function ColorPicker3d() {
   const ref = useRef();
   const handleChange = (e) => {
     let hex = e.target.value;
-    if (hex[0] === '#') {
+    if (validateColor(hex)) {
       setCurrentColor(hex);
     }
   };
