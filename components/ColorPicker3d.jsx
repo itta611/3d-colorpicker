@@ -9,6 +9,7 @@ import {
   Input,
 } from '@chakra-ui/react';
 import ColorBox from './ColorBox';
+import ColorCubes from './ColorCubes';
 import { useState, useRef, createRef, useEffect } from 'react';
 
 function validateColor(hex) {
@@ -19,7 +20,6 @@ function validateColor(hex) {
 
 function ColorPicker3d() {
   const [currentColor, setCurrentColor] = useState('#38B2AC');
-  const ref = useRef();
   const handleChange = (e) => {
     let hex = e.target.value;
     if (validateColor(hex)) {
@@ -35,7 +35,7 @@ function ColorPicker3d() {
       <PopoverContent>
         <PopoverArrow />
         <PopoverBody>
-          <Box ref={ref} h="xs"></Box>
+          <ColorCubes />
           <Input value={currentColor} maxLength={7} onChange={handleChange} />
         </PopoverBody>
       </PopoverContent>
