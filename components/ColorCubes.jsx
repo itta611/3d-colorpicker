@@ -32,21 +32,26 @@ function ColorCubes() {
     controls.target = target;
 
     let cubes = [];
-    for (let x = 0; x < 6; x++) {
+    const size = 6;
+    for (let x = 0; x < size; x++) {
       cubes.push([]);
-      for (let y = 0; y < 6; y++) {
+      for (let y = 0; y < size; y++) {
         cubes[x].push([]);
-        for (let z = 0; z < 6; z++) {
+        for (let z = 0; z < size; z++) {
           const cube = new THREE.Mesh(
-            new THREE.BoxBufferGeometry(10, 10, 10),
+            new THREE.BoxBufferGeometry(15, 15, 15),
             new THREE.MeshBasicMaterial({
-              color: (0xff / 5) * x * 0x10000 + (0xff / 5) * y * 0x100 + (0xff / 5) * z,
+              color:
+                (0xff / (size - 1)) * x * 0x10000 +
+                (0xff / (size - 1)) * y * 0x100 +
+                (0xff / (size - 1)) * z,
             })
           );
-          // 15 * 5 / 2 = 37.5
-          cube.position.x = x * 15 - 37.5;
-          cube.position.y = y * 15 - 37.5;
-          cube.position.z = z * 15 - 37.5;
+          const spacing = 20;
+          const centerDiff = (spacing * (size - 1)) / 2;
+          cube.position.x = x * spacing - centerDiff;
+          cube.position.y = y * spacing - centerDiff;
+          cube.position.z = z * spacing - centerDiff;
           cubes[x][y].push(cube);
           scene.add(cube);
         }
