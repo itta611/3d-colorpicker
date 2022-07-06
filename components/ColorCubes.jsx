@@ -43,9 +43,10 @@ function ColorCubes() {
               color: (0xff / 5) * x * 0x10000 + (0xff / 5) * y * 0x100 + (0xff / 5) * z,
             })
           );
-          cube.position.x = x * 15 - 30;
-          cube.position.y = y * 15 - 30;
-          cube.position.z = z * 15 - 30;
+          // 15 * 5 / 2 = 37.5
+          cube.position.x = x * 15 - 37.5;
+          cube.position.y = y * 15 - 37.5;
+          cube.position.z = z * 15 - 37.5;
           cubes[x][y].push(cube);
           scene.add(cube);
         }
