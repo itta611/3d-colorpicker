@@ -22,6 +22,9 @@ function ColorPicker3d() {
   const [currentColor, setCurrentColor] = useState('#38B2AC');
   const handleChange = (e) => {
     let hex = e.target.value;
+    if (hex?.[0] != '#') {
+      hex += '#';
+    }
     if (validateColor(hex)) {
       setCurrentColor(hex);
     }
