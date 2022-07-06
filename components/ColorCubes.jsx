@@ -30,6 +30,10 @@ function ColorCubes() {
 
     const controls = new OrbitControls(camera, renderer.domElement);
     controls.target = target;
+    controls.enablePan = false;
+    controls.enableZoom = false;
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.1;
 
     let cubes = [];
     const size = 6;
