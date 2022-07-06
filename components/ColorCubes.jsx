@@ -24,7 +24,7 @@ function ColorCubes() {
     const scene = new THREE.Scene();
 
     const camera = new THREE.OrthographicCamera(scW / -2, scW / 2, scH / 2, scH / -2, 1, 1000);
-    camera.position.set(-400, 200, 400);
+    camera.position.set(400, 200, 400);
 
     camera.lookAt(target);
 
