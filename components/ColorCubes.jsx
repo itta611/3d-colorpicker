@@ -3,8 +3,10 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { Box } from '@chakra-ui/react';
 import { useState, useRef, createRef, useEffect } from 'react';
 
-function ColorCubes() {
+function ColorCubes({ saturation }) {
   const refContainer = useRef();
+  const [cubes, setcubes] = useState([]);
+  const size = 6;
 
   useEffect(() => {
     const { current: container } = refContainer;
@@ -35,12 +37,11 @@ function ColorCubes() {
     controls.enableDamping = true;
     controls.dampingFactor = 0.1;
 
-    let cubes = [];
-    const size = 6;
+    let cubesTemp = [];
     for (let x = 0; x < size; x++) {
-      cubes.push([]);
+      cubesTemp.push([]);
       for (let y = 0; y < size; y++) {
-        cubes[x].push([]);
+        cubesTemp[x].push([]);
         for (let z = 0; z < size; z++) {
           const cube = new THREE.Mesh(
             new THREE.BoxBufferGeometry(15, 15, 15),
@@ -56,11 +57,12 @@ function ColorCubes() {
           cube.position.x = x * spacing - centerDiff;
           cube.position.y = y * spacing - centerDiff;
           cube.position.z = z * spacing - centerDiff;
-          cubes[x][y].push(cube);
+          cubesTemp[x][y].push(cube);
           scene.add(cube);
         }
       }
     }
+    setcubes(cubesTemp);
 
     let req = null;
 
@@ -72,6 +74,19 @@ function ColorCubes() {
     animate();
     return () => cancelAnimationFrame(req);
   }, []);
+
+  useEffect(() => {
+    if (cubes.length > 0) {
+      for (let x = 0; x < size; x++) {
+        for (let y = 0; y < size; y++) {
+          for (let z = 0; z < size; z++) {
+            cubes[x][y][z].visible = x + y + z < saturation;
+            // cubes[x][y][z].visible = false;
+          }
+        }
+      }
+    }
+  }, [cubes, saturation]);
   return <Box flexGrow={1} h="2xs" ref={refContainer} />;
 }
 

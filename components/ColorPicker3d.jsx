@@ -15,7 +15,7 @@ import {
 } from '@chakra-ui/react';
 import ColorBox from './ColorBox';
 import ColorCubes from './ColorCubes';
-import { useState, useRef, createRef, useEffect } from 'react';
+import { useState } from 'react';
 
 function validateColor(hex) {
   // just check it is a hex color
@@ -25,7 +25,7 @@ function validateColor(hex) {
 
 function ColorPicker3d() {
   const [currentColor, setCurrentColor] = useState('#38B2AC');
-  const [saturation, setSaturation] = useState(6);
+  const [saturation, setSaturation] = useState(11);
   const handleChange = (e) => {
     let hex = e.target.value;
     if (hex?.[0] != '#') {
@@ -50,7 +50,9 @@ function ColorPicker3d() {
               area-label="saturation"
               orientation="vertical"
               defaultValue={0}
-              max={6}
+              min={1}
+              max={16}
+              value={saturation}
               minH={24}
               onChange={setSaturation}
             >
