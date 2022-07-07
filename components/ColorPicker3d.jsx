@@ -7,6 +7,11 @@ import {
   Button,
   Box,
   Input,
+  Slider,
+  SliderTrack,
+  SliderFilledTrack,
+  SliderThumb,
+  HStack,
 } from '@chakra-ui/react';
 import ColorBox from './ColorBox';
 import ColorCubes from './ColorCubes';
@@ -20,6 +25,7 @@ function validateColor(hex) {
 
 function ColorPicker3d() {
   const [currentColor, setCurrentColor] = useState('#38B2AC');
+  const [saturation, setSaturation] = useState(6);
   const handleChange = (e) => {
     let hex = e.target.value;
     if (hex?.[0] != '#') {
@@ -38,7 +44,22 @@ function ColorPicker3d() {
       <PopoverContent>
         <PopoverArrow />
         <PopoverBody>
-          <ColorCubes />
+          <HStack my={10} mx={5}>
+            <ColorCubes saturation={saturation} />
+            <Slider
+              area-label="saturation"
+              orientation="vertical"
+              defaultValue={0}
+              max={6}
+              minH={24}
+              onChange={setSaturation}
+            >
+              <SliderTrack>
+                <SliderFilledTrack />
+              </SliderTrack>
+              <SliderThumb />
+            </Slider>
+          </HStack>
           <Input value={currentColor} maxLength={7} onChange={handleChange} />
         </PopoverBody>
       </PopoverContent>

@@ -72,7 +72,7 @@ function ColorCubes() {
     animate();
     return () => cancelAnimationFrame(req);
   }, []);
-  return <Box h="xs" ref={refContainer} />;
+  return <Box flexGrow={1} h="2xs" ref={refContainer} />;
 }
 
 export default ColorCubes;
