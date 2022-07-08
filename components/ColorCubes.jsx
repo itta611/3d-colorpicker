@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { Box } from '@chakra-ui/react';
 import { useState, useRef, useEffect } from 'react';
+import TWEEN from '@tweenjs/tween.js';
 
 let camera;
 let activeCubes;
@@ -10,6 +11,7 @@ let scX, scY;
 let hoveringColor = null;
 let mouseDownX, mouseDownY;
 let cubes = [];
+let scaledCubes = [];
 const size = 6;
 
 function CubeForEach(callback) {
@@ -20,6 +22,14 @@ function CubeForEach(callback) {
       }
     }
   }
+}
+
+function animationScale(cube, scale) {
+  const tween = new TWEEN.Tween(cube.scale)
+    .to({ x: scale, y: scale, z: scale }, 100)
+    .easing(TWEEN.Easing.Quadratic.Out)
+    .start();
+  return tween;
 }
 
 function ColorCubes({ saturation, setCurrentColor }) {
@@ -35,17 +45,22 @@ function ColorCubes({ saturation, setCurrentColor }) {
     const intersects = raycaster.intersectObjects(activeCubes);
     if (intersects.length > 0) {
       const intersect = intersects[0];
-      const color = `#${intersect.object.material.color.getHexString()}`;
-      CubeForEach((x, y, z) => {
-        cubes[x][y][z].scale.set(1, 1, 1);
-      });
-      intersect.object.scale.set(1.2, 1.2, 1.2);
-      hoveringColor = color;
+      if (scaledCubes.indexOf(intersect.object) === -1) {
+        const color = `#${intersect.object.material.color.getHexString()}`;
+        hoveringColor = color;
+        scaledCubes.forEach((cube) => {
+          animationScale(cube, 1);
+        });
+        scaledCubes = [];
+        scaledCubes.push(intersect.object);
+        animationScale(intersect.object, 1.2);
+      }
     } else {
       hoveringColor = null;
-      CubeForEach((x, y, z) => {
-        cubes[x][y][z].scale.set(1, 1, 1);
+      scaledCubes.forEach((cube) => {
+        animationScale(cube, 1);
       });
+      scaledCubes = [];
     }
   };
 
@@ -124,6 +139,7 @@ function ColorCubes({ saturation, setCurrentColor }) {
       req = requestAnimationFrame(animate);
       renderer.render(scene, camera);
       controls.update();
+      TWEEN.update();
     };
     animate();
     return () => cancelAnimationFrame(req);
