@@ -26,10 +26,24 @@ function ColorCubes({ saturation, setCurrentColor }) {
     if (intersects.length > 0) {
       const intersect = intersects[0];
       const color = `#${intersect.object.material.color.getHexString()}`;
-      intersect.object.scale.set(1.1, 1.1, 1.1);
+      for (let x = 0; x < size; x++) {
+        for (let y = 0; y < size; y++) {
+          for (let z = 0; z < size; z++) {
+            cubes[x][y][z].scale.set(1, 1, 1);
+          }
+        }
+      }
+      intersect.object.scale.set(1.2, 1.2, 1.2);
       hoveringColor = color;
     } else {
       hoveringColor = null;
+      for (let x = 0; x < size; x++) {
+        for (let y = 0; y < size; y++) {
+          for (let z = 0; z < size; z++) {
+            cubes[x][y][z].scale.set(1, 1, 1);
+          }
+        }
+      }
     }
   };
 
@@ -129,7 +143,7 @@ function ColorCubes({ saturation, setCurrentColor }) {
         }
       }
     }
-  }, [cubes, saturation]);
+  }, [saturation]);
   return (
     <Box
       flexGrow={1}
