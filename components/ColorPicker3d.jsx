@@ -39,7 +39,7 @@ function ColorPicker3d() {
   return (
     <Popover isLazy>
       <PopoverTrigger>
-        <Button leftIcon={<ColorBox currentColor={currentColor} />}>Select Color</Button>
+        <Button leftIcon={<ColorBox currentColor={currentColor} />}>{currentColor}</Button>
       </PopoverTrigger>
       <PopoverContent>
         <PopoverArrow />
