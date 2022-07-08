@@ -9,10 +9,10 @@ let scW, scH;
 let scX, scY;
 let hoveringColor = null;
 let mouseDownX, mouseDownY;
+let cubes = [];
 
 function ColorCubes({ saturation, setCurrentColor }) {
   const refContainer = useRef();
-  const [cubes, setcubes] = useState([]);
   const size = 6;
 
   const handleMouseMove = (e) => {
@@ -26,6 +26,7 @@ function ColorCubes({ saturation, setCurrentColor }) {
     if (intersects.length > 0) {
       const intersect = intersects[0];
       const color = `#${intersect.object.material.color.getHexString()}`;
+      intersect.object.scale.set(1.1, 1.1, 1.1);
       hoveringColor = color;
     } else {
       hoveringColor = null;
@@ -74,11 +75,11 @@ function ColorCubes({ saturation, setCurrentColor }) {
     controls.enableDamping = true;
     controls.dampingFactor = 0.1;
 
-    let cubesTemp = [];
+    cubes = [];
     for (let x = 0; x < size; x++) {
-      cubesTemp.push([]);
+      cubes.push([]);
       for (let y = 0; y < size; y++) {
-        cubesTemp[x].push([]);
+        cubes[x].push([]);
         for (let z = 0; z < size; z++) {
           const cube = new THREE.Mesh(
             new THREE.BoxBufferGeometry(15, 15, 15),
@@ -95,12 +96,11 @@ function ColorCubes({ saturation, setCurrentColor }) {
           cube.position.x = x * spacing - centerDiff;
           cube.position.y = y * spacing - centerDiff;
           cube.position.z = z * spacing - centerDiff;
-          cubesTemp[x][y].push(cube);
+          cubes[x][y].push(cube);
           scene.add(cube);
         }
       }
     }
-    setcubes(cubesTemp);
 
     let req = null;
 
