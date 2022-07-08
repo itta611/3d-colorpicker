@@ -1,12 +1,14 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { Box } from '@chakra-ui/react';
-import { useState, useRef, createRef, useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 
 let camera;
 let activeCubes;
 let scW, scH;
 let scX, scY;
+let hoveringColor = null;
+let mouseDownX, mouseDownY;
 
 function ColorCubes({ saturation, setCurrentColor }) {
   const refContainer = useRef();
@@ -24,9 +26,20 @@ function ColorCubes({ saturation, setCurrentColor }) {
     if (intersects.length > 0) {
       const intersect = intersects[0];
       const color = `#${intersect.object.material.color.getHexString()}`;
-      console.log(color);
-      setCurrentColor(color);
+      hoveringColor = color;
+    } else {
+      hoveringColor = null;
     }
+  };
+
+  const handleMouseDown = (e) => {
+    mouseDownX = e.clientX;
+    mouseDownY = e.clientY;
+  };
+
+  const handleMouseUp = (e) => {
+    const notDrag = e.clientX == mouseDownX && e.clientY == mouseDownY;
+    if (hoveringColor && notDrag) setCurrentColor(hoveringColor);
   };
 
   useEffect(() => {
@@ -117,7 +130,16 @@ function ColorCubes({ saturation, setCurrentColor }) {
       }
     }
   }, [cubes, saturation]);
-  return <Box flexGrow={1} h="2xs" ref={refContainer} onMouseMove={handleMouseMove} />;
+  return (
+    <Box
+      flexGrow={1}
+      h="2xs"
+      ref={refContainer}
+      onMouseDown={handleMouseDown}
+      onMouseUp={handleMouseUp}
+      onMouseMove={handleMouseMove}
+    />
+  );
 }
 
 export default ColorCubes;
