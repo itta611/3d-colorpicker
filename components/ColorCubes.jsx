@@ -10,10 +10,20 @@ let scX, scY;
 let hoveringColor = null;
 let mouseDownX, mouseDownY;
 let cubes = [];
+const size = 6;
+
+function CubeForEach(callback) {
+  for (let x = 0; x < size; x++) {
+    for (let y = 0; y < size; y++) {
+      for (let z = 0; z < size; z++) {
+        callback(x, y, z);
+      }
+    }
+  }
+}
 
 function ColorCubes({ saturation, setCurrentColor }) {
   const refContainer = useRef();
-  const size = 6;
 
   const handleMouseMove = (e) => {
     const clientX = e.clientX - scX;
@@ -26,24 +36,16 @@ function ColorCubes({ saturation, setCurrentColor }) {
     if (intersects.length > 0) {
       const intersect = intersects[0];
       const color = `#${intersect.object.material.color.getHexString()}`;
-      for (let x = 0; x < size; x++) {
-        for (let y = 0; y < size; y++) {
-          for (let z = 0; z < size; z++) {
-            cubes[x][y][z].scale.set(1, 1, 1);
-          }
-        }
-      }
+      CubeForEach((x, y, z) => {
+        cubes[x][y][z].scale.set(1, 1, 1);
+      });
       intersect.object.scale.set(1.2, 1.2, 1.2);
       hoveringColor = color;
     } else {
       hoveringColor = null;
-      for (let x = 0; x < size; x++) {
-        for (let y = 0; y < size; y++) {
-          for (let z = 0; z < size; z++) {
-            cubes[x][y][z].scale.set(1, 1, 1);
-          }
-        }
-      }
+      CubeForEach((x, y, z) => {
+        cubes[x][y][z].scale.set(1, 1, 1);
+      });
     }
   };
 
@@ -130,18 +132,14 @@ function ColorCubes({ saturation, setCurrentColor }) {
   useEffect(() => {
     activeCubes = [];
     if (cubes.length > 0) {
-      for (let x = 0; x < size; x++) {
-        for (let y = 0; y < size; y++) {
-          for (let z = 0; z < size; z++) {
-            if (x + y + z < saturation) {
-              cubes[x][y][z].visible = true;
-              activeCubes.push(cubes[x][y][z]);
-            } else {
-              cubes[x][y][z].visible = false;
-            }
-          }
+      CubeForEach((x, y, z) => {
+        if (x + y + z < saturation) {
+          cubes[x][y][z].visible = true;
+          activeCubes.push(cubes[x][y][z]);
+        } else {
+          cubes[x][y][z].visible = false;
         }
-      }
+      });
     }
   }, [saturation]);
   return (
