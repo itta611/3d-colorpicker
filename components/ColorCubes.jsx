@@ -3,15 +3,39 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { Box } from '@chakra-ui/react';
 import { useState, useRef, createRef, useEffect } from 'react';
 
-function ColorCubes({ saturation }) {
+let camera;
+let activeCubes;
+let scW, scH;
+let scX, scY;
+
+function ColorCubes({ saturation, setCurrentColor }) {
   const refContainer = useRef();
   const [cubes, setcubes] = useState([]);
   const size = 6;
 
+  const handleMouseMove = (e) => {
+    const clientX = e.clientX - scX;
+    const clientY = e.clientY - scY;
+    const x = (clientX / scW) * 2 - 1;
+    const y = -(clientY / scH) * 2 + 1;
+    const raycaster = new THREE.Raycaster();
+    raycaster.setFromCamera(new THREE.Vector2(x, y), camera);
+    const intersects = raycaster.intersectObjects(activeCubes);
+    if (intersects.length > 0) {
+      const intersect = intersects[0];
+      const color = `#${intersect.object.material.color.getHexString()}`;
+      console.log(color);
+      setCurrentColor(color);
+    }
+  };
+
   useEffect(() => {
     const { current: container } = refContainer;
-    const scW = container.clientWidth;
-    const scH = container.clientHeight;
+    const domRect = container.getBoundingClientRect();
+    scW = domRect.width;
+    scH = domRect.height;
+    scX = domRect.x;
+    scY = domRect.y;
     const target = new THREE.Vector3(0, 0, 0);
 
     const renderer = new THREE.WebGLRenderer({
@@ -25,7 +49,7 @@ function ColorCubes({ saturation }) {
 
     const scene = new THREE.Scene();
 
-    const camera = new THREE.OrthographicCamera(scW / -2, scW / 2, scH / 2, scH / -2, 1, 1000);
+    camera = new THREE.OrthographicCamera(scW / -2, scW / 2, scH / 2, scH / -2, 1, 1000);
     camera.position.set(400, 200, 400);
 
     camera.lookAt(target);
@@ -46,6 +70,7 @@ function ColorCubes({ saturation }) {
           const cube = new THREE.Mesh(
             new THREE.BoxBufferGeometry(15, 15, 15),
             new THREE.MeshBasicMaterial({
+              transparent: true,
               color:
                 (0xff / (size - 1)) * x * 0x10000 +
                 (0xff / (size - 1)) * y * 0x100 +
@@ -76,18 +101,23 @@ function ColorCubes({ saturation }) {
   }, []);
 
   useEffect(() => {
+    activeCubes = [];
     if (cubes.length > 0) {
       for (let x = 0; x < size; x++) {
         for (let y = 0; y < size; y++) {
           for (let z = 0; z < size; z++) {
-            cubes[x][y][z].visible = x + y + z < saturation;
-            // cubes[x][y][z].visible = false;
+            if (x + y + z < saturation) {
+              cubes[x][y][z].visible = true;
+              activeCubes.push(cubes[x][y][z]);
+            } else {
+              cubes[x][y][z].visible = false;
+            }
           }
         }
       }
     }
   }, [cubes, saturation]);
-  return <Box flexGrow={1} h="2xs" ref={refContainer} />;
+  return <Box flexGrow={1} h="2xs" ref={refContainer} onMouseMove={handleMouseMove} />;
 }
 
 export default ColorCubes;
