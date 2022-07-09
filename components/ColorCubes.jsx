@@ -10,7 +10,7 @@ let scX, scY;
 let hoveringColor = null;
 let mouseDownX, mouseDownY;
 let cubes = [];
-let scaledCubes = [];
+let scaledCube;
 const scW = 200;
 const scH = 200;
 const size = 6;
@@ -32,6 +32,7 @@ function setRect(container) {
 }
 
 function animationScale(cube, scale) {
+  if (!cube) return;
   const tween = new TWEEN.Tween(cube.scale)
     .to({ x: scale, y: scale, z: scale }, 100)
     .easing(TWEEN.Easing.Quadratic.Out)
@@ -128,7 +129,6 @@ function ColorCubes({ saturation, setCurrentColor, popoverOpenRef }) {
   };
 
   const handleMouseMove = (e) => {
-    console.log(scW, scH, scX, scY);
     const clientX = e.clientX - scX;
     const clientY = e.clientY - scY;
     const x = (clientX / scW) * 2 - 1;
@@ -139,22 +139,17 @@ function ColorCubes({ saturation, setCurrentColor, popoverOpenRef }) {
 
     if (intersects.length > 0) {
       const intersect = intersects[0];
-      if (scaledCubes.indexOf(intersect.object) === -1) {
+      if (scaledCube !== intersect.object) {
         const color = `#${intersect.object.material.color.getHexString()}`;
         hoveringColor = color;
-        scaledCubes.forEach((cube) => {
-          animationScale(cube, 1);
-        });
-        scaledCubes = [];
-        scaledCubes.push(intersect.object);
+        animationScale(scaledCube, 1);
+        scaledCube = intersect.object;
         animationScale(intersect.object, 1.2);
       }
     } else {
       hoveringColor = null;
-      scaledCubes.forEach((cube) => {
-        animationScale(cube, 1);
-      });
-      scaledCubes = [];
+      animationScale(scaledCube, 1);
+      scaledCube = null;
     }
   };
 
