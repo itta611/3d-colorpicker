@@ -34,9 +34,7 @@ function setActiveCube(saturation, animate = true) {
   activeCubes = [];
   if (cubes.length > 0) {
     for (let x = 0; x < size; x++) {
-      activeCubes.push([]);
       for (let y = 0; y < size; y++) {
-        activeCubes[x].push([]);
         for (let z = 0; z < size; z++) {
           const cube = cubes[x][y][z];
           if (x + y + z < saturation) {
@@ -46,10 +44,9 @@ function setActiveCube(saturation, animate = true) {
             }
             cube.visible = true;
             cube.userData.isActive = true;
-            activeCubes[x][y][z] = cube;
+            activeCubes.push(cube);
           } else {
             if (animate && cube.userData.isActive) {
-              console.log(cube.visible);
               cube.scale.set(1, 1, 1);
               animationScale(cube, 0).onComplete(() => {
                 cube.visible = false;
@@ -143,9 +140,8 @@ function ColorCubes({ saturation, setCurrentColor, popoverOpenRef }) {
     const x = (clientX / scW) * 2 - 1;
     const y = -(clientY / scH) * 2 + 1;
     const raycaster = new THREE.Raycaster();
-    const activeCubesFlatten = activeCubes.flat(3);
     raycaster.setFromCamera(new THREE.Vector2(x, y), camera);
-    const intersects = raycaster.intersectObjects(activeCubesFlatten);
+    const intersects = raycaster.intersectObjects(activeCubes);
 
     if (intersects.length > 0) {
       const intersect = intersects[0];
