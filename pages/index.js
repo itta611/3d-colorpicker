@@ -7,11 +7,14 @@ function Index() {
   useEffect(() => {
     setDefaultColor(
       '#' +
-        Math.floor(
-          Math.floor(Math.random() * 5) * (0xff / 5) * 0x10000 +
-            Math.floor(Math.random() * 5) * (0xff / 5) * 0x100 +
-            Math.floor(Math.random() * 5) * (0xff / 5)
-        ).toString(16)
+        (
+          '000000' +
+          Math.floor(
+            Math.floor(Math.random() * 5) * (0xff / 5) * 0x10000 +
+              Math.floor(Math.random() * 5) * (0xff / 5) * 0x100 +
+              Math.floor(Math.random() * 5) * (0xff / 5)
+          ).toString(16)
+        ).slice(-6)
     );
   }, []);
   return (
