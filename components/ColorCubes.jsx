@@ -58,6 +58,7 @@ function ColorCubes({ saturation, setCurrentColor, popoverOpenRef }) {
   const refContainer = useRef();
 
   popoverOpenRef.current = () => {
+    if (camera) return;
     const { current: container } = refContainer;
     setRect(container);
     const target = new THREE.Vector3(0, 0, 0);
