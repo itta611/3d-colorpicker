@@ -169,6 +169,8 @@ function ColorCubes({ saturation, setCurrentColor, popoverOpenRef }) {
     if (hoveringColor && notDrag) setCurrentColor(hoveringColor);
   };
 
+  useEffect(() => setRect(refContainer.current), []);
+
   useEffect(() => {
     setActiveCube(saturation);
   }, [saturation]);
