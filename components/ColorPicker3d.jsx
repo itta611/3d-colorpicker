@@ -18,7 +18,6 @@ import ColorCubes from './ColorCubes';
 import { useState, useRef } from 'react';
 
 function validateColor(hex) {
-  // just check it is a hex color
   const regex = /^#[0-9a-f]*$/i;
   return regex.test(hex);
 }
@@ -53,11 +52,13 @@ function ColorPicker3d({ defaultColor }) {
         <PopoverArrow />
         <PopoverBody>
           <HStack my={10} mx={5}>
-            <ColorCubes
-              saturation={saturation}
-              setCurrentColor={setCurrentColor}
-              popoverOpenRef={popoverOpenRef}
-            />
+            <Box display="flex" alignItems="center" justifyContent="center" h="2xs" flexGrow={1}>
+              <ColorCubes
+                saturation={saturation}
+                setCurrentColor={setCurrentColor}
+                popoverOpenRef={popoverOpenRef}
+              />
+            </Box>
             <Slider
               area-label="saturation"
               orientation="vertical"

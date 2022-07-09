@@ -6,12 +6,13 @@ import TWEEN from '@tweenjs/tween.js';
 
 let camera;
 let activeCubes;
-let scW, scH;
 let scX, scY;
 let hoveringColor = null;
 let mouseDownX, mouseDownY;
 let cubes = [];
 let scaledCubes = [];
+const scW = 200;
+const scH = 200;
 const size = 6;
 
 function CubeForEach(callback) {
@@ -26,8 +27,6 @@ function CubeForEach(callback) {
 
 function setRect(container) {
   const domRect = container.getBoundingClientRect();
-  scW = domRect.width;
-  scH = domRect.height;
   scX = domRect.x;
   scY = domRect.y;
 }
@@ -177,8 +176,8 @@ function ColorCubes({ saturation, setCurrentColor, popoverOpenRef }) {
 
   return (
     <Box
-      flexGrow={1}
-      h="2xs"
+      h="200px"
+      w="200px"
       ref={refContainer}
       onMouseDown={handleMouseDown}
       onMouseUp={handleMouseUp}
