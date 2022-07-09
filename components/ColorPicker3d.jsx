@@ -45,7 +45,9 @@ function ColorPicker3d({ defaultColor }) {
       }}
     >
       <PopoverTrigger>
-        <Button leftIcon={<ColorBox currentColor={currentColor} />}>{currentColor}</Button>
+        <Button leftIcon={<ColorBox currentColor={currentColor} />} fontFamily="mono">
+          {currentColor}
+        </Button>
       </PopoverTrigger>
       <PopoverContent>
         <PopoverArrow />
@@ -72,7 +74,7 @@ function ColorPicker3d({ defaultColor }) {
               <SliderThumb />
             </Slider>
           </HStack>
-          <Input value={currentColor} maxLength={7} onChange={handleChange} />
+          <Input value={currentColor} maxLength={7} onChange={handleChange} fontFamily="mono" />
         </PopoverBody>
       </PopoverContent>
     </Popover>
