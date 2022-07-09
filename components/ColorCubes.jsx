@@ -24,6 +24,14 @@ function CubeForEach(callback) {
   }
 }
 
+function setRect(container) {
+  const domRect = container.getBoundingClientRect();
+  scW = domRect.width;
+  scH = domRect.height;
+  scX = domRect.x;
+  scY = domRect.y;
+}
+
 function animationScale(cube, scale) {
   const tween = new TWEEN.Tween(cube.scale)
     .to({ x: scale, y: scale, z: scale }, 100)
@@ -76,11 +84,7 @@ function ColorCubes({ saturation, setCurrentColor }) {
 
   useEffect(() => {
     const { current: container } = refContainer;
-    const domRect = container.getBoundingClientRect();
-    scW = domRect.width;
-    scH = domRect.height;
-    scX = domRect.x;
-    scY = domRect.y;
+    setRect(container);
     const target = new THREE.Vector3(0, 0, 0);
 
     const renderer = new THREE.WebGLRenderer({
