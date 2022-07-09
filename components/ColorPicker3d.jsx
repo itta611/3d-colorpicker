@@ -23,8 +23,11 @@ function validateColor(hex) {
   return regex.test(hex);
 }
 
-function ColorPicker3d() {
-  const [currentColor, setCurrentColor] = useState('#38B2AC');
+function ColorPicker3d({ defaultColor }) {
+  const [currentColor, setCurrentColor] = useState(defaultColor);
+  if (defaultColor && !currentColor) {
+    setCurrentColor(defaultColor);
+  }
   const [saturation, setSaturation] = useState(11);
   const handleChange = (e) => {
     let hex = e.target.value;
