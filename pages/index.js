@@ -24,7 +24,7 @@ function Index() {
       </Heading>
       <FormControl>
         <FormLabel htmlFor="profile-color">Profile Color</FormLabel>
-        <ColorPicker3d defaultColor={defaultColor} id="profile-color" />
+        {defaultColor ? <ColorPicker3d defaultColor={defaultColor} id="profile-color" /> : null}
       </FormControl>
       <Box mt={5} display="flex" flexDir="row-reverse">
         <Button colorScheme="teal">Save</Button>

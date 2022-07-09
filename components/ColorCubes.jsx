@@ -40,8 +40,14 @@ function animationScale(cube, scale) {
   return tween;
 }
 
-function ColorCubes({ saturation, setCurrentColor }) {
+function ColorCubes({ saturation, setCurrentColor, popoverOpenRef }) {
   const refContainer = useRef();
+
+  popoverOpenRef.current = () => {
+    setTimeout(() => {
+      setRect(refContainer.current);
+    }, 250);
+  };
 
   const handleMouseMove = (e) => {
     const clientX = e.clientX - scX;

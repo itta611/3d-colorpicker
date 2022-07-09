@@ -15,7 +15,7 @@ import {
 } from '@chakra-ui/react';
 import ColorBox from './ColorBox';
 import ColorCubes from './ColorCubes';
-import { useState, popoverOpenRef } from 'react';
+import { useState, useRef } from 'react';
 
 function validateColor(hex) {
   // just check it is a hex color
@@ -25,10 +25,9 @@ function validateColor(hex) {
 
 function ColorPicker3d({ defaultColor }) {
   const [currentColor, setCurrentColor] = useState(defaultColor);
-  if (defaultColor && !currentColor) {
-    setCurrentColor(defaultColor);
-  }
   const [saturation, setSaturation] = useState(11);
+  const popoverOpenRef = useRef(null);
+
   const handleChange = (e) => {
     let hex = e.target.value;
     if (hex?.[0] != '#') {
@@ -40,7 +39,11 @@ function ColorPicker3d({ defaultColor }) {
   };
 
   return (
-    <Popover isLazy>
+    <Popover
+      onOpen={() => {
+        popoverOpenRef.current();
+      }}
+    >
       <PopoverTrigger>
         <Button leftIcon={<ColorBox currentColor={currentColor} />}>{currentColor}</Button>
       </PopoverTrigger>
@@ -51,7 +54,7 @@ function ColorPicker3d({ defaultColor }) {
             <ColorCubes
               saturation={saturation}
               setCurrentColor={setCurrentColor}
-              ref={popoverOpenRef}
+              popoverOpenRef={popoverOpenRef}
             />
             <Slider
               area-label="saturation"
