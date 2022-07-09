@@ -8,9 +8,9 @@ function Index() {
     setDefaultColor(
       '#' +
         Math.floor(
-          Math.floor(Math.random() * 6) * (0xff / 6) * 0x10000 +
-            Math.floor(Math.random() * 6) * (0xff / 6) * 0x100 +
-            Math.floor(Math.random() * 6) * (0xff / 6)
+          Math.floor(Math.random() * 5) * (0xff / 5) * 0x10000 +
+            Math.floor(Math.random() * 5) * (0xff / 5) * 0x100 +
+            Math.floor(Math.random() * 5) * (0xff / 5)
         ).toString(16)
     );
   }, []);
