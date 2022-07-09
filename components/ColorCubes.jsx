@@ -5,7 +5,7 @@ import { useRef, useEffect } from 'react';
 import TWEEN from '@tweenjs/tween.js';
 
 let camera;
-let activeCubes;
+let activeCubes = [];
 let scX, scY;
 let hoveringColor = null;
 let mouseDownX, mouseDownY;
@@ -14,16 +14,6 @@ let scaledCube;
 const scW = 200;
 const scH = 200;
 const size = 6;
-
-function CubeForEach(callback) {
-  for (let x = 0; x < size; x++) {
-    for (let y = 0; y < size; y++) {
-      for (let z = 0; z < size; z++) {
-        callback(x, y, z);
-      }
-    }
-  }
-}
 
 function setRect(container) {
   const domRect = container.getBoundingClientRect();
@@ -40,17 +30,36 @@ function animationScale(cube, scale) {
   return tween;
 }
 
-function setActiveCube(saturation) {
+function setActiveCube(saturation, animate = true) {
   activeCubes = [];
   if (cubes.length > 0) {
-    CubeForEach((x, y, z) => {
-      if (x + y + z < saturation) {
-        cubes[x][y][z].visible = true;
-        activeCubes.push(cubes[x][y][z]);
-      } else {
-        cubes[x][y][z].visible = false;
+    for (let x = 0; x < size; x++) {
+      activeCubes.push([]);
+      for (let y = 0; y < size; y++) {
+        activeCubes[x].push([]);
+        for (let z = 0; z < size; z++) {
+          const cube = cubes[x][y][z];
+          if (x + y + z < saturation) {
+            if (animate && !cube.userData.isActive) {
+              cube.scale.set(0, 0, 0);
+              animationScale(cube, 1);
+            }
+            cube.visible = true;
+            cube.userData.isActive = true;
+            activeCubes[x][y][z] = cube;
+          } else {
+            if (animate && cube.userData.isActive) {
+              console.log(cube.visible);
+              cube.scale.set(1, 1, 1);
+              animationScale(cube, 0).onComplete(() => {
+                cube.visible = false;
+              });
+              cube.userData.isActive = false;
+            }
+          }
+        }
       }
-    });
+    }
   }
 }
 
@@ -120,7 +129,7 @@ function ColorCubes({ saturation, setCurrentColor, popoverOpenRef }) {
       TWEEN.update();
     };
     animate();
-    setActiveCube(saturation);
+    setActiveCube(saturation, false);
 
     setTimeout(() => {
       setRect(container);
@@ -134,8 +143,9 @@ function ColorCubes({ saturation, setCurrentColor, popoverOpenRef }) {
     const x = (clientX / scW) * 2 - 1;
     const y = -(clientY / scH) * 2 + 1;
     const raycaster = new THREE.Raycaster();
+    const activeCubesFlatten = activeCubes.flat(3);
     raycaster.setFromCamera(new THREE.Vector2(x, y), camera);
-    const intersects = raycaster.intersectObjects(activeCubes);
+    const intersects = raycaster.intersectObjects(activeCubesFlatten);
 
     if (intersects.length > 0) {
       const intersect = intersects[0];
