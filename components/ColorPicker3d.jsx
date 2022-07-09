@@ -25,7 +25,7 @@ function validateColor(hex) {
 
 function ColorPicker3d({ defaultColor }) {
   const [currentColor, setCurrentColor] = useState(defaultColor);
-  const [saturation, setSaturation] = useState(11);
+  const [saturation, setSaturation] = useState(16);
   const popoverOpenRef = useRef(null);
 
   const handleChange = (e) => {
