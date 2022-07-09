@@ -124,10 +124,12 @@ function ColorCubes({ saturation, setCurrentColor, popoverOpenRef }) {
 
     setTimeout(() => {
       setRect(container);
-    }, 250);
+      renderer.setSize(scW, scH);
+    }, 300);
   };
 
   const handleMouseMove = (e) => {
+    console.log(scW, scH, scX, scY);
     const clientX = e.clientX - scX;
     const clientY = e.clientY - scY;
     const x = (clientX / scW) * 2 - 1;
