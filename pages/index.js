@@ -1,4 +1,4 @@
-import { Container, Box, FormControl, FormLabel, Heading, Button } from '@chakra-ui/react';
+import { Container, Box, FormControl, FormLabel, Heading, Button, Link } from '@chakra-ui/react';
 import { useState, useEffect } from 'react';
 import ColorPicker3d from '../components/ColorPicker3d';
 
@@ -28,6 +28,11 @@ function Index() {
       </FormControl>
       <Box mt={5} display="flex" flexDir="row-reverse">
         <Button colorScheme="teal">Save</Button>
+      </Box>
+      <Box mt={'16'} textAlign="center">
+        <Link href="https://github.com/itta611/3d-colorpicker" fontFamily="mono">
+          View source on GitHub
+        </Link>
       </Box>
     </Container>
   );
